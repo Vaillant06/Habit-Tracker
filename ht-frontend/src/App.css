@@ -4,3 +4,9 @@
 .primary:hover {
     background-color: #d46701;
 }
+
+@media (max-width: 767px) {
+    .card {
+        width: 90%;
+    }
+}
