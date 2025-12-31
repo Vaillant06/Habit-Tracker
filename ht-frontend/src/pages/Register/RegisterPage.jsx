@@ -23,6 +23,7 @@ export default function RegisterPage() {
       
         if (formData.password !== formData.confirmPassword) {
           setError("Passwords do not match");
+          setFormData({ ...formData, password: "", confirmPassword: "" });
       
           setTimeout(() => {
             setError("");

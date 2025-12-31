@@ -35,6 +35,7 @@ export default function LoginPage() {
               }
               else{
                 setError(data.message);
+                setUserData({ ...userData, email: "", password: "" });
               }
             
               console.log(data);
