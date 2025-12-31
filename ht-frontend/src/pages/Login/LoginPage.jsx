@@ -35,6 +35,10 @@ export default function LoginPage() {
               }
               else{
                 setError(data.message);
+
+                setTimeout(() => {
+                    setError("")
+                }, 3000);
               }
             
               console.log(data);
