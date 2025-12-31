@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function LoginPage() {
     const [userData, setUserData] = useState({
@@ -7,6 +8,7 @@ export default function LoginPage() {
     });
 
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     
     const handleChange = (e) => {
@@ -26,8 +28,9 @@ export default function LoginPage() {
     
           return;
         }
+
+        navigate("/dashboard");
     
-        console.log("Login Data:", userData);
     };
 
     return (
@@ -77,6 +80,10 @@ export default function LoginPage() {
                         <i className="bi bi-arrow-right-circle me-2"></i>
                         Login
                     </button>
+
+                    <div className="redirection text-center mt-3">
+                        <p>Don't have an account? <Link to="/register">Register</Link></p>
+                    </div>
                 </form>
             </div>
         </div>
