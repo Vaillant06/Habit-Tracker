@@ -22,7 +22,7 @@ export default function LoginPage() {
         const { username, email, password } = userData;
 
         try {
-            const result = await fetch("http://127.0.0.1:5000/login", {
+            const result = await fetch("https://habit-tracker-1j63.onrender.com/login", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ username, email, password }),
