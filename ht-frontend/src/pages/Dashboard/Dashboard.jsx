@@ -15,7 +15,7 @@ export default function Dashboard() {
         }
 
         async function fetchUser() {
-            const res = await fetch(`http://127.0.0.1:5000/user/${email}`);
+            const res = await fetch(`https://habit-tracker-1j63.onrender.com/user/${email}`);
             const data = await res.json();
 
             if (res.ok) {

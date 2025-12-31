@@ -37,7 +37,7 @@ export default function RegisterPage() {
         const { username, email, password } = formData;
 
         try {
-            const result = await fetch("http://127.0.0.1:5000/register", {
+            const result = await fetch("https://habit-tracker-1j63.onrender.com/register", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ username, email, password }),
