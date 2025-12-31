@@ -10,6 +10,7 @@ export default function RegisterPage() {
     });
 
     const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -31,20 +32,27 @@ export default function RegisterPage() {
         }
       
         const { username, email, password } = formData;
-      
-        const result = await fetch("http://127.0.0.1:5000/register", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        });
-      
-        const data = await result.json();
-      
-        if (result.ok) {
-          navigate("/");
+
+        try {
+            const result = await fetch("http://127.0.0.1:5000/register", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await result.json();
+            setMessage(data.message);
+
+            if (result.ok) {
+                navigate("/");
+              }
+            
+              console.log(data);
         }
-      
-        console.log(data);
+
+        catch (err) {
+            setError(err.message);
+        }
     };
       
 
@@ -117,7 +125,7 @@ export default function RegisterPage() {
                     </div>
                     )}
 
-                    <button className="btn primary w-100 text-white fw-semibold mt-3" onClick={handleSubmit}>
+                    <button className="btn primary w-100 text-white fw-semibold mt-3" type="submit">
                         <i className="bi bi-arrow-right-circle me-2"></i>
                         Register
                     </button>
@@ -125,6 +133,13 @@ export default function RegisterPage() {
                     <div className="redirection text-center mt-3">
                         <p>Already have an account? <Link to='/'>Login</Link></p>
                     </div>
+                    
+                    {message && (
+                    <p>
+                        {message}
+                    </p>
+                    )}
+
                 </form>
             </div>
         </div>
