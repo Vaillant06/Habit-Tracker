@@ -20,20 +20,26 @@ export default function LoginPage() {
         e.preventDefault();
       
         const { username, email, password } = userData;
-      
-        const result = await fetch("http://127.0.0.1:5000/login", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        });
-      
-        const data = await result.json();
-      
-        if (result.ok) {
-          navigate("/dashboard");  
+
+        try {
+            const result = await fetch("http://127.0.0.1:5000/login", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ username, email, password }),
+              });
+            
+              const data = await result.json();
+            
+              if (result.ok) {
+                navigate("/dashboard");  
+              }
+            
+              console.log(data);
         }
-      
-        console.log(data);
+
+        catch (err) {
+            setError(err.message);
+        }
     }
       
 
