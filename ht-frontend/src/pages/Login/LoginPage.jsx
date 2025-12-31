@@ -8,6 +8,7 @@ export default function LoginPage() {
     });
 
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     
@@ -18,7 +19,8 @@ export default function LoginPage() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-      
+        setLoading(true);
+
         const { username, email, password } = userData;
 
         try {
@@ -40,15 +42,16 @@ export default function LoginPage() {
               }
             
               console.log(data);
-        }
-
-        catch (err) {
+              
+        } catch (err) {
             setError(err.message);
         }
 
         setTimeout(() => {
             setError("")
         }, 3000);
+
+        setLoading(false);
     }
       
 
@@ -92,6 +95,13 @@ export default function LoginPage() {
                     <div className="alert alert-danger py-2">
                         <i className="bi bi-exclamation-triangle me-2"></i>
                         {error}
+                    </div>
+                    )}
+
+                    {loading && (
+                    <div className="alert alert-info py-2">
+                        <i className="bi bi-hourglass-split me-2"></i>
+                        Checking credentials, please wait...
                     </div>
                     )}
 
