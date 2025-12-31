@@ -1,19 +1,48 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const email = localStorage.getItem("email");
+
+        if (!isLoggedIn || !email) {
+            navigate("/");
+            return;
+        }
+
+        async function fetchUser() {
+            const res = await fetch(`http://127.0.0.1:5000/user/${email}`);
+            const data = await res.json();
+
+            if (res.ok) {
+                setUser(data);
+            }
+        }
+
+        fetchUser();
+    }, []);
+    
+    if (!user) return <p className="mt-5 text-center">Loading user data...</p>;
+
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="card p-5">
-                <h3 className="card-title">Profile</h3>
-                <h5 className="card-body">Name: USER</h5>
-                <h5 className="card-body">Email: user@gmail.com</h5>
-                <h5 className="card-body">Last Login: 31 December</h5>
-                <div className="d-flex justify-content-center mt-4">
-                    <Link to="/login" className="btn btn-primary">
-                        Logout
-                    </Link>
-                </div>
-            </div>   
+                <h1 className="card-title">Profile</h1>
+                <h4 className="fw-bold">Name : {user.username}</h4>
+                <p className="text-muted">Email : {user.email}</p>
+
+                <button className="btn btn-danger mt-3"
+                    onClick={() => {
+                    localStorage.clear();
+                    navigate("/");
+                    }}>
+                    Logout
+                </button>
+            </div>
         </div>
     );
 }

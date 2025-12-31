@@ -7,48 +7,51 @@ export default function LoginPage() {
         password: ""
     });
 
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    const [message, setMessage] = useState("");
+    const [messageType, messageSetType] = useState("");
+    const [loading, setLoading] = useState(false);
     
     const handleChange = (e) => {
       setUserData({ ...userData, [e.target.name]: e.target.value });
-      setError(""); 
+      setMessage(""); 
     };
 
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
-        const { username, email, password } = userData;
+        const {  email, password } = userData;
 
         try {
-            const result = await fetch("https://habit-tracker-1j63.onrender.com/login", {
+            const result = await fetch("http://127.0.0.1:5000/login", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({ username, email, password }),
-              });
-            
-              const data = await result.json();
-            
-              if (result.ok) {
-                navigate("/dashboard");  
-              }
-              else{
-                setError(data.message);
+                body: JSON.stringify({ email, password }),
+            });
+        
+            const data = await result.json();
+            setMessage(data.message);
+        
+            if (result.ok) {
+                localStorage.setItem("email", email);
+                localStorage.setItem("isLoggedIn", "true");
+                messageSetType("success");
+
+                setTimeout(() => {
+                    setMessage("");
+                    navigate("/dashboard");
+                }, 3000);
+                  
+            } else {
                 setUserData({ ...userData, email: "", password: "" });
-              }
-            
-              console.log(data);
+            }
+        
+            console.log(data);
 
         } catch (err) {
-            setError(err.message);
+            setMessage(err.message);
         }
-
-        setTimeout(() => {
-            setError("")
-        }, 3000);
 
         setLoading(false);
     }
@@ -58,7 +61,7 @@ export default function LoginPage() {
         <>
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="card p-5">
-                <h3 className="text-center mb-5  fw-bold">
+                <h3 className="text-center mb-5 fw-bold">
                     <i className="bi bi-person me-2"></i>
                     Login
                 </h3>
@@ -90,10 +93,9 @@ export default function LoginPage() {
                         />
                     </div>
 
-                    {error && (
-                    <div className="alert alert-danger py-2">
-                        <i className="bi bi-exclamation-triangle me-2"></i>
-                        {error}
+                    {message && (
+                    <div className={messageType === "success" ? "alert alert-success py-2" : "alert alert-danger py-2"}>
+                        {message}
                     </div>
                     )}
 

@@ -9,14 +9,14 @@ export default function RegisterPage() {
         confirmPassword: ""
     });
 
-    const [error, setError] = useState("");
     const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-        setError("");
+        setMessage("");
     };
     
     async function handleSubmit(e) {
@@ -24,11 +24,11 @@ export default function RegisterPage() {
         setLoading(true);
       
         if (formData.password !== formData.confirmPassword) {
-          setError("Passwords do not match");
+          setMessage("Passwords do not match");
           setFormData({ ...formData, password: "", confirmPassword: "" });
       
           setTimeout(() => {
-            setError("");
+            setMessage("");
           }, 3000);
       
           return;
@@ -37,7 +37,7 @@ export default function RegisterPage() {
         const { username, email, password } = formData;
 
         try {
-            const result = await fetch("https://habit-tracker-1j63.onrender.com/register", {
+            const result = await fetch("http://127.0.0.1:5000/register", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ username, email, password }),
@@ -45,16 +45,20 @@ export default function RegisterPage() {
 
             const data = await result.json();
             setMessage(data.message);
+            setMessageType("success");
 
             if (result.ok) {
-                navigate("/");
-              }
+                setTimeout(() => {
+                    setMessage("");
+                    navigate("/");
+                }, 3000);
+            }
             
-              console.log(data);
+            console.log(data);
         }
 
         catch (err) {
-            setError(err.message);
+            setMessage(err.message);
         }
 
         setLoading(false);
@@ -123,10 +127,9 @@ export default function RegisterPage() {
                         />
                     </div>
 
-                    {error && (
-                    <div className="alert alert-danger py-2">
-                        <i className="bi bi-exclamation-triangle me-2"></i>
-                        {error}
+                    {message && (
+                    <div className={messageType === "success" ? "alert alert-success py-2" : "alert alert-danger py-2"}>
+                        {message}
                     </div>
                     )}
 
@@ -145,13 +148,6 @@ export default function RegisterPage() {
                     <div className="redirection text-center mt-3">
                         <p>Already have an account? <Link to='/'>Login</Link></p>
                     </div>
-                    
-                    {message && (
-                    <p>
-                        {message}
-                    </p>
-                    )}
-
                 </form>
             </div>
         </div>

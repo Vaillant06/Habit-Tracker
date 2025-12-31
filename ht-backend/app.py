@@ -34,7 +34,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "Registered successfully"}), 201
+    return jsonify({"message": "Registeration successful. Redirecting..."}), 201
 
 
 @app.route("/login", methods=["POST"])
@@ -48,7 +48,7 @@ def login():
     if not user or not check_password_hash(user.password, password):
         return jsonify({"message": "Invalid credentials"}), 401
 
-    return jsonify({"message": "Login success"}), 200
+    return jsonify({"message": "Login successful, redirecting..."}), 200
 
 
 @app.route("/user/<email>", methods=["GET"])
@@ -63,6 +63,5 @@ def get_user(email):
 
 if __name__ == "__main__":
     with app.app_context():
-        db.drop_all()
-        db.create_all()
+        db.create_all()  
     app.run(debug=True)

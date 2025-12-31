@@ -1,9 +1,0 @@
-{   
-    "projectId":"prj_IPRNY5wMj1p2P4ujgwa1jFOQONHO",
-    "orgId":"team_52Awex0O6gcZC7NOhQOPcdlN",
-    "projectName":"ht-frontend",
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/" }
-    ]
-}
-  
