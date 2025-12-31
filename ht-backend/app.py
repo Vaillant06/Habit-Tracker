@@ -14,6 +14,10 @@ db.init_app(app)
 
 # ---------- Routes ---------- #
 
+@app.route("/")
+def home():
+    return "Habit Tracker Backend is running."  
+
 
 @app.route("/register", methods=["POST"])
 def register():
