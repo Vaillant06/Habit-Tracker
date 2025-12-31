@@ -61,7 +61,7 @@ export default function LoginPage() {
                         <input
                         type="password"
                         className="form-control"
-                        placeholder="Create password"
+                        placeholder="Enter your password"
                         name="password"
                         value={userData.password}
                         onChange={handleChange}
