@@ -25,3 +25,4 @@ dist-ssr
 .vercel
 
 ht-backend/instance/database.db
+.env*.local

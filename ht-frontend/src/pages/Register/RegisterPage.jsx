@@ -83,6 +83,7 @@ export default function RegisterPage() {
                         placeholder="Enter username"
                         name="username"
                         value={formData.username}
+                        autoComplete="off"
                         onChange={handleChange}
                         required
                         />
@@ -96,6 +97,7 @@ export default function RegisterPage() {
                         placeholder="Enter email"
                         name="email"
                         value={formData.email}
+                        autoComplete="off"
                         onChange={handleChange}
                         required
                         />

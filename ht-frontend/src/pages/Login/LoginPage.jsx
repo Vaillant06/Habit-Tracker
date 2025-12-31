@@ -75,6 +75,7 @@ export default function LoginPage() {
                         placeholder="Enter email"
                         name="email"
                         value={userData.email}
+                        autoComplete="off"
                         onChange={handleChange}
                         required
                         />
