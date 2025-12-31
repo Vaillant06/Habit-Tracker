@@ -33,6 +33,9 @@ export default function LoginPage() {
               if (result.ok) {
                 navigate("/dashboard");  
               }
+              else{
+                setError(data.message);
+              }
             
               console.log(data);
         }
