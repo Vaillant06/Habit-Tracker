@@ -8,10 +8,12 @@ export default function Dashboard() {
                 <h5 className="card-body">Name: USER</h5>
                 <h5 className="card-body">Email: user@gmail.com</h5>
                 <h5 className="card-body">Last Login: 31 December</h5>
+                <div className="d-flex justify-content-center mt-4">
+                    <Link to="/login" className="btn btn-primary">
+                        Logout
+                    </Link>
+                </div>
             </div>   
-            <div>
-                <Link to="/login">Logout</Link>  
-            </div>
         </div>
     );
 }
