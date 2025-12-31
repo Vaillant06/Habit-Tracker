@@ -51,7 +51,18 @@ def login():
     return jsonify({"message": "Login success"}), 200
 
 
+@app.route("/user/<email>", methods=["GET"])
+def get_user(email):
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    return jsonify({"username": user.username, "email": user.email}), 200
+
+
 if __name__ == "__main__":
     with app.app_context():
+        db.drop_all()
         db.create_all()
     app.run(debug=True)
