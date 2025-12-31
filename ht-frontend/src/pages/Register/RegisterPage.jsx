@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -10,25 +10,43 @@ export default function RegisterPage() {
     });
 
     const [error, setError] = useState("");
-
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         setError("");
     };
     
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
-        if(formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
-
-            setTimeout(() => {
-                setError("");
-            }, 3000)
-            return;
-        } 
-        console.log(formData); 
+      
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match");
+      
+          setTimeout(() => {
+            setError("");
+          }, 3000);
+      
+          return;
+        }
+      
+        const { username, email, password } = formData;
+      
+        const result = await fetch("http://127.0.0.1:5000/register", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        });
+      
+        const data = await result.json();
+      
+        if (result.ok) {
+          navigate("/");
+        }
+      
+        console.log(data);
     };
+      
 
     return (
         <>
@@ -99,7 +117,7 @@ export default function RegisterPage() {
                     </div>
                     )}
 
-                    <button className="btn primary w-100 text-white fw-semibold mt-3">
+                    <button className="btn primary w-100 text-white fw-semibold mt-3" onClick={handleSubmit}>
                         <i className="bi bi-arrow-right-circle me-2"></i>
                         Register
                     </button>

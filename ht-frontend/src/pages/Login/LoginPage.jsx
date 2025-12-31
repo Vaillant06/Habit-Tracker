@@ -16,22 +16,26 @@ export default function LoginPage() {
       setError(""); 
     };
 
-    const handleSubmit = (e) => {
+    async function handleSubmit(e) {
         e.preventDefault();
-    
-        if (!userData.email || !userData.password) {
-          setError("All fields are required");
-    
-          setTimeout(() => {
-            setError("");
-          }, 3000);
-    
-          return;
+      
+        const { username, email, password } = userData;
+      
+        const result = await fetch("http://127.0.0.1:5000/login", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        });
+      
+        const data = await result.json();
+      
+        if (result.ok) {
+          navigate("/dashboard");  
         }
-
-        navigate("/dashboard");
-    
-    };
+      
+        console.log(data);
+    }
+      
 
     return (
         <>
