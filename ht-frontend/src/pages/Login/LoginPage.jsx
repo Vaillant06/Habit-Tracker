@@ -35,10 +35,6 @@ export default function LoginPage() {
               }
               else{
                 setError(data.message);
-
-                setTimeout(() => {
-                    setError("")
-                }, 3000);
               }
             
               console.log(data);
@@ -47,6 +43,10 @@ export default function LoginPage() {
         catch (err) {
             setError(err.message);
         }
+
+        setTimeout(() => {
+            setError("")
+        }, 3000);
     }
       
 
