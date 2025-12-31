@@ -11,6 +11,7 @@ export default function RegisterPage() {
 
     const [error, setError] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -20,6 +21,7 @@ export default function RegisterPage() {
     
     async function handleSubmit(e) {
         e.preventDefault();
+        setLoading(true);
       
         if (formData.password !== formData.confirmPassword) {
           setError("Passwords do not match");
@@ -54,6 +56,8 @@ export default function RegisterPage() {
         catch (err) {
             setError(err.message);
         }
+
+        setLoading(false);
     };
       
 
@@ -123,6 +127,13 @@ export default function RegisterPage() {
                     <div className="alert alert-danger py-2">
                         <i className="bi bi-exclamation-triangle me-2"></i>
                         {error}
+                    </div>
+                    )}
+
+                    {loading && (
+                    <div className="alert alert-info py-2">
+                        <i className="bi bi-hourglass-split me-2"></i>
+                        Registering your account, please wait...
                     </div>
                     )}
 
