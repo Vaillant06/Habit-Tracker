@@ -33,7 +33,6 @@ export default function LoginPage() {
               const data = await result.json();
             
               if (result.ok) {
-                localStorage.setItem("isLoggedIn", "true");
                 navigate("/dashboard");  
               }
               else{
@@ -42,7 +41,7 @@ export default function LoginPage() {
               }
             
               console.log(data);
-              
+
         } catch (err) {
             setError(err.message);
         }

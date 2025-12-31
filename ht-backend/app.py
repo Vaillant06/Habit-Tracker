@@ -22,14 +22,15 @@ def home():
 @app.route("/register", methods=["POST"])
 def register():
     data = request.json
+    username = data.get("username")
     email = data.get("email")
     password = data.get("password")
 
     if not email or not password:
-        return jsonify({"msg": "Fields cannot be empty"}), 400
+        return jsonify({"message": "Fields cannot be empty"}), 400
 
     hashed_password = generate_password_hash(password)
-    new_user = User(email=email, password=hashed_password)
+    new_user = User(username=username, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
