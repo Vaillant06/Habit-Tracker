@@ -37,21 +37,24 @@ export default function RegisterPage() {
         const { username, email, password } = formData;
 
         try {
-            const result = await fetch("https://habit-tracker-1j63.onrender.com/register", {
+            const result = await fetch("http://127.0.0.1:8000/auth/register", {
             method: "POST",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ username, email, password }),
             });
 
             const data = await result.json();
-            setMessage(data.message);
-            setMessageType("success");
-
             if (result.ok) {
+                setMessage(`User ${data.username} registered successfully!`);
+                setMessageType("success");
+
                 setTimeout(() => {
                     setMessage("");
                     navigate("/");
                 }, 3000);
+            } else {
+                setMessage(data.detail || "Registration failed");
+                setMessageType("danger");
             }
             
             console.log(data);
