@@ -24,16 +24,18 @@ export default function LoginPage() {
         const {  email, password } = userData;
 
         try {
-            const result = await fetch("https://habit-tracker-1j63.onrender.com/login", {
+            const result = await fetch("http://127.0.0.1:8000/auth/login", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
         
             const data = await result.json();
-            setMessage(data.message);
+            setMessage(data.detail);
+            messageSetType("failure")
         
             if (result.ok) {
+                setMessage(data.message);
                 localStorage.setItem("email", email);
                 localStorage.setItem("isLoggedIn", "true");
                 messageSetType("success");
@@ -45,9 +47,11 @@ export default function LoginPage() {
                   
             } else {
                 setUserData({ ...userData, email: "", password: "" });
+                setTimeout(() => {
+                    setMessage("");
+                }, 3000)
             }
         
-            console.log(data);
 
         } catch (err) {
             setMessage(err.message);

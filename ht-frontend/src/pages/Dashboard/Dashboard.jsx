@@ -1,48 +1,101 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import "./Dashboard.css"
+
+import HabitCardGrid from "../../components/HabitCardGrid/HabitCardGrid";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import Header from "../../components/Header/Header";
+
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+    const [username, setUsername] = useState("");
+    const email = localStorage.getItem("email");
 
     useEffect(() => {
-        const isLoggedIn = localStorage.getItem("isLoggedIn");
-        const email = localStorage.getItem("email");
+        const getData = async (email) => {
+            try {
+                const encodedEmail = encodeURIComponent(email);
+                const response = await fetch(`http://127.0.0.1:8000/auth/user?email=${encodedEmail}`);
 
-        if (!isLoggedIn || !email) {
-            navigate("/");
-            return;
-        }
+                if(!response.ok) {
+                    const errorBody = await response.json();
+                    throw new Error(errorBody.detail || "failed to fetch user");
+                }
 
-        async function fetchUser() {
-            const res = await fetch(`https://habit-tracker-1j63.onrender.com/user/${email}`);
-            const data = await res.json();
+                const data = await response.json();
+                setUsername(data.username);
 
-            if (res.ok) {
-                setUser(data);
+            } catch( error ) {
+                setUsername(error.message);
             }
         }
 
-        fetchUser();
-    }, []);
-    
-    if (!user) return <p className="mt-5 text-center">Loading user data...</p>;
+        if(email) {
+            getData(email);
+        }
+    }, [email]);
+
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="card p-5">
-                <h1 className="card-title">Profile</h1>
-                <h4 className="fw-bold">Name : {user.username}</h4>
-                <p className="text-muted">Email : {user.email}</p>
+        <>
+        <Header />
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-lg-4">
+                    <Sidebar username={username} email={email}  />
+                </div>
 
-                <button className="btn btn-danger mt-3"
-                    onClick={() => {
-                    localStorage.clear();
-                    navigate("/");
-                    }}>
-                    Logout
-                </button>
+                <div className="col-lg-8">
+                    <main className="main-content">
+                        <p>
+                            Create New Habit 
+                            <button 
+                                className="btn btn-success mx-2"
+                                data-bs-toggle="modal"
+                                data-bs-target="#createHabitModal"
+                            >
+                                <i className="bi bi-plus-circle me-1"></i>
+                                New
+                            </button>
+                        </p>
+                        <HabitCardGrid />
+                    </main>
+                </div>
+            </div>
+
+            <div className="modal fade" id="createHabitModal" tabIndex="-1">
+                <div className="modal-dialog modal-dialog-bottom">
+                    <div className="modal-content">
+
+                        <div className="modal-header">
+                            <h5 className="modal-title">Create New Habit</h5>
+                            <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            ></button>
+                        </div>
+
+                        <div className="modal-body">
+                            <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Habit name"
+                            />
+                        </div>
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button className="btn btn-primary">Save Habit</button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
-    );
+        
+        </>
+        
+    )
 }
