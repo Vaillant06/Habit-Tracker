@@ -36,7 +36,7 @@ def login(user: UserLogin, response: Response, db: Session = Depends(get_db)):
     db_user = db.query(User).filter_by(email=user.email).first()
 
     if not db_user or not verify_password(user.password, db_user.password):
-        raise HTTPException(401, "Invalid credentials")
+        raise HTTPException(401, "Invalid credentials!")
 
     token = generate_session_token()
     session = UserSession(user_id=db_user.id, session_token=token)
@@ -46,7 +46,7 @@ def login(user: UserLogin, response: Response, db: Session = Depends(get_db)):
 
     response.set_cookie("session_token", token, httponly=True)
 
-    return {"message": "Login successful"}
+    return {"message": "Login successful!"}
 
 @router.post("/logout")
 def logout(request: Request, response: Response, db: Session = Depends(get_db)):
@@ -58,3 +58,16 @@ def logout(request: Request, response: Response, db: Session = Depends(get_db)):
 
     response.delete_cookie("session_token")
     return {"message": "Logged out"}
+
+
+@router.get("/user")
+def get_user(email: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(401, "Error displaying details!")
+
+    return {
+        "id": user.id,
+        "email": user.email,
+        "username": user.username
+    }

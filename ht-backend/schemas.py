@@ -14,5 +14,5 @@ class UserOut(BaseModel):
         orm_mode = True
 
 class UserLogin(BaseModel):
-    identifier: str
+    email: str
     password: str
